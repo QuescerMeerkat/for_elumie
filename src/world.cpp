@@ -4,7 +4,9 @@
 
 namespace zx{
 
-World::World(ZxDevice& zxDevice) : zxDevice{zxDevice}{}
+World::World(ZxDevice& zxDevice) : zxDevice{zxDevice}{
+  chunks.push_back(std::make_unique<Chunk>(zxDevice));
+}
 World::~World(){}
 
 float rounded(const glm::vec2& coord){
@@ -103,11 +105,11 @@ void World::createTerrain(const glm::vec2& chunk_pos){
                 voxel = stone;
               }
             }
-            chunks[chunk_pos.x + chunk_pos.y * CHUNK_SIZE].voxels.push_back(voxel);
+            chunks[chunk_pos.x + chunk_pos.y * CHUNK_SIZE]->voxels.push_back(voxel);
         }
     }
   }
-  chunks[chunk_pos.x + chunk_pos.y * CHUNK_SIZE].create_mesh(chunk_pos);
+  chunks[chunk_pos.x + chunk_pos.y * CHUNK_SIZE]->create_mesh(chunk_pos);
 }
 
 void World::generateTerrain(glm::vec2& chunk_pos, uint32_t worldSize){

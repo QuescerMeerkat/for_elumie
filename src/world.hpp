@@ -29,16 +29,11 @@ public:
 
   ~World();
 
-      World(const World &) = default;
-      World &operator=(const World &) = default;
-      World(World &&) = default;
-      World &operator=(World &&) = default;
-
   void createChunkHeightMap(const glm::vec3& position, int worldSize, int seed);
   void createTerrain(const glm::vec2& chunk_pos);
   void generateTerrain(glm::vec2& chunk_pos, uint32_t worldSize);
 
-  std::vector<Chunk> chunks{zxDevice};
+  std::vector<std::unique_ptr<Chunk>> chunks;
   std::array<uint32_t, CHUNK_AREA> height_map;
 
   ZxDevice& zxDevice;

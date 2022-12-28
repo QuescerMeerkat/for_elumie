@@ -34,7 +34,6 @@ Chunk::~Chunk() {}
 
 void Chunk::createVertexBuffers() {
   vertexCount = static_cast<uint32_t>(vertices.size());
-  info(std::to_string(vertexCount), 1);
   assert(vertexCount >= 3 && "Vertex count must be at least 3!");
   VkDeviceSize bufferSize = sizeof(vertices[0]) * vertexCount;
   uint32_t vertexSize = sizeof(vertices[0]);
@@ -48,6 +47,9 @@ void Chunk::createVertexBuffers() {
   };
 
   stagingBuffer.map();
+  for(int i = 0; i < vertices.size(); i++){
+    vec3_info("VERTICES", vertices[i].position);
+  }
   stagingBuffer.writeToBuffer((void *)vertices.data());
 
   vertexBuffer = std::make_unique<ZxBuffer>(
@@ -80,6 +82,9 @@ void Chunk::createIndexBuffers() {
   };
 
   stagingBuffer.map();
+  for(int i = 0; i < indices.size(); i++){
+    info("INDICES", std::to_string(indices[i]));
+  }
   stagingBuffer.writeToBuffer((void *)indices.data());
 
   indexBuffer = std::make_unique<ZxBuffer>(

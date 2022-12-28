@@ -26,6 +26,7 @@
 namespace zx {
       std::vector<float> heightValues;
 FirstApp::FirstApp() {
+  worlds.push_back(std::make_unique<World>(zxDevice));
   globalPool =
       ZxDescriptorPool::Builder(zxDevice)
           .setMaxSets(ZxSwapChain::MAX_FRAMES_IN_FLIGHT)
@@ -141,9 +142,9 @@ void FirstApp::run() {
 
 void FirstApp::loadGameObjects() {
   World world{zxDevice};
-  worlds.emplace_back(std::move(world));
+  worlds.push_back(std::make_unique<World>(zxDevice));
   glm::vec2 pos = {0.f, 0.f};;
-  worlds[0].generateTerrain(pos, 1);
+  worlds[0]->generateTerrain(pos, 1);
 }
 
 }

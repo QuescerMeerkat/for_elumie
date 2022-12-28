@@ -37,6 +37,6 @@ class FirstApp {
   std::unique_ptr<ZxDescriptorPool> globalPool{};
   ZxGameObject::Map gameObjects;
 
-  std::vector<World> worlds;
+  std::vector<std::unique_ptr<World>> worlds;
 };
 }

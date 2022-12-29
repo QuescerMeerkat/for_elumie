@@ -20,7 +20,7 @@ class VoxelRenderSystem {
   VoxelRenderSystem(const VoxelRenderSystem &) = delete;
   VoxelRenderSystem &operator=(const VoxelRenderSystem &) = delete;
 
-  void renderChunks(FrameInfo& frameInfo);
+  void renderChunks(FrameInfo& frameInfo, std::vector<std::unique_ptr<World>> worlds);
 
  private:
   void createPipelineLayout(VkDescriptorSetLayout globalSetLayout);

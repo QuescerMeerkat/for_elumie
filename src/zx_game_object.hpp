@@ -42,7 +42,7 @@ class ZxGameObject {
   static ZxGameObject makePointLight(
       float intensity = 10.f, float radius = 0.1f, glm::vec3 color = glm::vec3(1.f));
       
-  static ZxGameObject createChunk(glm::vec3 position);
+  static std::unique_ptr<ZxGameObject> create_chunk_object(ZxDevice& zxDevice, glm::vec3 position);
 
   ZxGameObject(const ZxGameObject &) = delete;
   ZxGameObject &operator=(const ZxGameObject &) = delete;
@@ -53,7 +53,6 @@ class ZxGameObject {
 
   glm::vec3 color{};
   TransformComponent transform{};
-
   // Optional pointer components
   std::shared_ptr<ZxModel> model{};
   std::unique_ptr<Chunk> chunk = nullptr;

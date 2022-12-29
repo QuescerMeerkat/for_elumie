@@ -1,11 +1,14 @@
 #include "world.hpp"
+#include "zx_game_object.hpp"
 
 #include <iostream>
 
 namespace zx{
 
 World::World(ZxDevice& zxDevice) : zxDevice{zxDevice}{
-  chunks.push_back(std::make_unique<Chunk>(zxDevice));
+  glm::vec3 pos = {0.f, 0.f, 0.f};
+  std::unique_ptr<ZxGameObject> chunk_game_object = ZxGameObject::create_chunk_object(zxDevice, pos);
+  chunks.push_back(chunk_game_object);
 }
 World::~World(){}
 
@@ -105,11 +108,11 @@ void World::createTerrain(const glm::vec2& chunk_pos){
                 voxel = stone;
               }
             }
-            chunks[chunk_pos.x + chunk_pos.y * CHUNK_SIZE]->voxels.push_back(voxel);
+            chunks[chunk_pos.x + chunk_pos.y * CHUNK_SIZE]->chunk->voxels.push_back(voxel);
         }
     }
   }
-  chunks[chunk_pos.x + chunk_pos.y * CHUNK_SIZE]->create_mesh(chunk_pos);
+  chunks[chunk_pos.x + chunk_pos.y * CHUNK_SIZE]->chunk->create_mesh(chunk_pos);
 }
 
 void World::generateTerrain(glm::vec2& chunk_pos, uint32_t worldSize){

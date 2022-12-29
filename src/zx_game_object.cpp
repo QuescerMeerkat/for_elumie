@@ -68,11 +68,12 @@ ZxGameObject ZxGameObject::makePointLight(float intensity, float radius, glm::ve
   return gameObj;
 }
 
-ZxGameObject ZxGameObject::createChunk(glm::vec3 position){
+std::unique_ptr<ZxGameObject> ZxGameObject::create_chunk_object(ZxDevice& zxDevice, glm::vec3 position){
   ZxGameObject gameObj = ZxGameObject::createGameObject();
   gameObj.transform.translation = position;
   gameObj.transform.scale = {1.f, 1.f, 1.f};
-  return gameObj;
+  gameObj.chunk = std::make_unique<Chunk>(zxDevice);
+  return std::make_unique<ZxGameObject>(gameObj);
 }
 
 }

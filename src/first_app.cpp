@@ -121,7 +121,7 @@ void FirstApp::run() {
       ubo.view = camera.getView();
       ubo.inverseView = camera.getInverseView();
       ubo.cameraPosition = camera.getPosition();
-      vec3_info("Camera", camera.getPosition());
+      //vec3_info("Camera", camera.getPosition());
       ubo.dt = dt;
       uboBuffers[frameIndex]->writeToBuffer(&ubo);
       uboBuffers[frameIndex]->flush();
@@ -129,7 +129,7 @@ void FirstApp::run() {
       zxRenderer.beginSwapChainRenderPass(commandBuffer);
 
       simple_render_system.renderGameObjects(frameInfo);
-      voxel_render_system.renderChunks(frameInfo);
+      voxel_render_system.renderChunks(frameInfo, worlds);
 
       zxRenderer.endSwapChainRenderPass(commandBuffer);
       zxRenderer.endFrame();
@@ -142,7 +142,6 @@ void FirstApp::run() {
 
 void FirstApp::loadGameObjects() {
   World world{zxDevice};
-  worlds.push_back(std::make_unique<World>(zxDevice));
   glm::vec2 pos = {0.f, 0.f};;
   worlds[0]->generateTerrain(pos, 1);
 }

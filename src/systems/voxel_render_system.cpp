@@ -1,6 +1,6 @@
 #include "voxel_render_system.hpp"
 
-#include "chunk.hpp"
+#include "world.hpp"
 
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
@@ -64,7 +64,7 @@ void VoxelRenderSystem::createPipeline(VkRenderPass renderPass) {
       pipelineConfig);
 }
 
-void VoxelRenderSystem::renderChunks(FrameInfo& frameInfo) {
+void VoxelRenderSystem::renderChunks(FrameInfo& frameInfo, std::vector<std::unique_ptr<World>> worlds) {
   zxPipeline->bind(frameInfo.commandBuffer);
 
   vkCmdBindDescriptorSets(
@@ -77,22 +77,22 @@ void VoxelRenderSystem::renderChunks(FrameInfo& frameInfo) {
       0,
       nullptr);
 
-  for (auto& kv : frameInfo.gameObjects) {
-    auto& obj = kv.second;
-    if (obj.chunk == nullptr) continue;
-    VoxelPushConstantData push{};
-    push.modelMatrix = obj.transform.mat4();
-    push.normalMatrix = obj.transform.normalMatrix();
+  for (auto& world : worlds) {
+    for(auto& chunk_obj : world->chunks) {
+      VoxelPushConstantData push{};
+      push.modelMatrix = chunk_obj->transform.mat4();
+      push.normalMatrix = chunk_obj->transform.normalMatrix();
 
-    vkCmdPushConstants(
-        frameInfo.commandBuffer,
-        pipelineLayout,
-        VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
-        0,
-        sizeof(VoxelPushConstantData),
-        &push);
-    obj.chunk->bind(frameInfo.commandBuffer);
-    obj.chunk->draw(frameInfo.commandBuffer);
+      vkCmdPushConstants(
+          frameInfo.commandBuffer,
+          pipelineLayout,
+          VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+          0,
+          sizeof(VoxelPushConstantData),
+          &push);
+      chunk_obj->chunk->bind(frameInfo.commandBuffer);
+      chunk_obj->chunk->draw(frameInfo.commandBuffer);
+    }
   }
 }
 }

@@ -3,6 +3,7 @@
 #include "chunk.hpp"
 #include "defines.hpp"
 #include "zx_device.hpp"
+#include "zx_game_object.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/noise.hpp>
@@ -33,7 +34,7 @@ public:
   void createTerrain(const glm::vec2& chunk_pos);
   void generateTerrain(glm::vec2& chunk_pos, uint32_t worldSize);
 
-  std::vector<std::unique_ptr<Chunk>> chunks;
+  std::vector<std::unique_ptr<ZxGameObject>> chunks;
   std::array<uint32_t, CHUNK_AREA> height_map;
 
   ZxDevice& zxDevice;
